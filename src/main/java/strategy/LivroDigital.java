@@ -3,16 +3,13 @@ package strategy;
 public class LivroDigital extends Livro {
 
     @Override
-    public String verificarEmprestimo() {
-        if (this.getPreco() <= 150.0f) {
-            return "Aprovado";
-        } else {
-            return "Reprovado";
-        }
+    public boolean validarLimiteEmprestimo() {
+        return getPreco() <= 150.0f;
     }
 
     @Override
     public String getTipo() {
-        return "Ebook";
+        return "Livro Digital";
     }
+
 }

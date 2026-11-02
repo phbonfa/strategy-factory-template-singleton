@@ -1,6 +1,5 @@
 package strategy;
 
 public interface IServico {
-    String executar();
-    String cancelar();
+    String executar(Livro livro, Operacao estrategia, float valorAjuste);
 }

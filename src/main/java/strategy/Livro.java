@@ -3,8 +3,9 @@ package strategy;
 public abstract class Livro {
 
     private int codigo;
-    protected String titulo;
+    private String titulo;
     private float preco;
+    private String operadorProcessamento;
 
     public int getCodigo() {
         return codigo;
@@ -21,6 +22,9 @@ public abstract class Livro {
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
+    public String getTipo() {
+        return "Livro";
+    }
 
     public float getPreco() {
         return preco;
@@ -30,46 +34,27 @@ public abstract class Livro {
         this.preco = preco;
     }
 
-    public float calcularPrecoAjustado(Operacao operacao, float valorAjuste) {
-        return operacao.calcular(this.preco, valorAjuste);
+    public String getOperadorProcessamento() {
+        return operadorProcessamento;
     }
 
-    public void somarPreco(float valor1, float valor2) {
-        Calculadora calculadora = new Calculadora(valor1, valor2);
-        this.preco = calculadora.calcular(new OperacaoSomar());
+    public String processarEmprestimo(Operacao estrategiaAjuste, float valorAjuste) {
+        if (!validarLimiteEmprestimo()) {
+            return "Reprovado";
+        }
+
+        Calculadora calculadora = new Calculadora(this.preco, valorAjuste);
+        this.preco = calculadora.calcular(estrategiaAjuste);
+
+        this.operadorProcessamento = ContextoBiblioteca.getInstance().getUsuarioLogado();
+
+        return "Aprovado";
     }
 
-    public void subtrairPreco(float valor1, float valor2) {
-        Calculadora calculadora = new Calculadora(valor1, valor2);
-        this.preco = calculadora.calcular(new OperacaoSubtrair());
-    }
-
-    public void dividirPreco(float valor1, float valor2) {
-        Calculadora calculadora = new Calculadora(valor1, valor2);
-        this.preco = calculadora.calcular(new OperacaoDividir());
-    }
-
-    public void multiplicarPreco(float valor1, float valor2) {
-        Calculadora calculadora = new Calculadora(valor1, valor2);
-        this.preco = calculadora.calcular(new OperacaoMultiplicar());
-    }
-
-    public void calcularMediaPrecos(float valor1, float valor2) {
-        Calculadora calculadora = new Calculadora(valor1, valor2);
-        this.preco = calculadora.calcular(new OperacaoMedia());
-    }
-
-    public abstract String verificarEmprestimo();
-
-    public String getTipo() {
-        return "Livro";
-    }
+    public abstract boolean validarLimiteEmprestimo();
 
     public String getInfo() {
-        return getTipo() + "{" +
-                "codigo=" + this.codigo +
-                ", titulo='" + this.titulo + '\'' +
-                ", resultado=" + this.verificarEmprestimo() +
-                '}';
+        return getTipo() + "{codigo=" + codigo + ", titulo='" + titulo
+                + "', preco=" + preco + ", resultado=" + validarLimiteEmprestimo() + "}";
     }
 }
