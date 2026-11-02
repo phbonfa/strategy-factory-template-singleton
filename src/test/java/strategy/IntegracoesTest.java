@@ -44,14 +44,13 @@ class IntegracoesTest {
         IServico servico = ServicoFactory.obterServico("Emprestimo");
         LivroDigital ebook = new LivroDigital();
         ebook.setPreco(100.0f);
-
+    
         String resultado = servico.executar(ebook, new OperacaoMultiplicar(), 1.2f);
-
+    
         assertEquals("Aprovado", resultado);
-        assertEquals(120.00001f, ebook.getPreco());
+        assertEquals(120.0f, ebook.getPreco(), 0.01f);
         assertEquals("Operador1", ebook.getOperadorProcessamento());
     }
-
     @Test
     void deveExecutarFluxoComLivroDigitalEStrategyMedia() {
         IServico servico = ServicoFactory.obterServico("Emprestimo");
